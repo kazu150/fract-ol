@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/06/29 19:59:16 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:12:07 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ int	event_handler(int key, void *mlx)
 	return (0);
 }
 
+void	draw(void *mlx, void *mlx_win)
+{
+	int	i;
+
+	i = 0;
+	while (i < 100)
+	{
+		mlx_pixel_put(mlx, mlx_win, i + 50, i + 50, 0xFFFFFF);
+		i++;
+	}
+}
+
 int	main(void)
 {
 	void	*mlx;
@@ -31,6 +43,6 @@ int	main(void)
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 300, 300, "Hello World");
 	mlx_hook(mlx_win, KeyPress, KeyPressMask, event_handler, mlx);
-	mlx_string_put(mlx, mlx_win, 50, 100, 0xFFFFFF, "Zoom: XX");
+	draw(mlx, mlx_win);
 	mlx_loop(mlx);
 }
