@@ -6,7 +6,7 @@
 #    By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/03 16:26:12 by kaisogai          #+#    #+#              #
-#    Updated: 2025/06/29 19:26:41 by kaisogai         ###   ########.fr        #
+#    Updated: 2025/07/21 18:07:28 by kaisogai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,9 @@ SRCS = \
 	$(SRC_DIR)/main.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+MLX_DIR   = mlx
+MLX       = $(MLX_DIR)/libmlx.a
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
 LIBFT_OBJS = \
 	ft_isalnum.o ft_isprint.o ft_memcpy.o ft_putendl_fd.o \
@@ -36,18 +39,20 @@ LIBFT_OBJS = \
 	ft_printf.o ft_putnbr_base.o ft_putuint_fd.o \
 	numlen.o print_nums.o print_words.o
 
-
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(MLX) $(NAME)
 
 $(NAME): $(OBJS)
 	@mkdir -p $(TMP_DIR)
 	cp $(LIBFT) $(TMP_DIR)/
 	cd $(TMP_DIR) && ar x libft.a
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(addprefix $(TMP_DIR)/, $(LIBFT_OBJS))
+	$(CC) $(CFLAGS) $(OBJS) $(addprefix $(TMP_DIR)/, $(LIBFT_OBJS)) $(MLX_FLAGS) -o $(NAME)
 	rm -rf $(TMP_DIR)
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
+
+$(MLX):
+	@$(MAKE) -C $(MLX_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
@@ -56,11 +61,14 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 clean:
 	rm -rf $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) -C $(MLX_DIR) clean
 
 fclean: clean
 	rm -f $(NAME)
 	rm -f libft.a
+	rm -f $(MLX)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(MLX_DIR) clean
 
 debug: CFLAGS += -g
 debug: re
