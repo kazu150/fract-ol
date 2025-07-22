@@ -6,31 +6,20 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/07/22 16:51:40 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/07/22 20:39:15 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
-#include "../libft/libft.h"
-#include "../mlx/mlx.h"
-#include <X11/X.h>
-#include <X11/keysym.h>
-#include <math.h>
-#include <stdio.h>
 
-typedef struct t_complex
+typedef struct s_vars
 {
-	double	real;
-	double	imag;
-}			s_complex;
-
-int	event_handler(int key, void *mlx)
-{
-	(void)key;
-	(void)mlx;
-	printf("called\n");
-	return (0);
-}
+	void	*mlx;
+	void	*win;
+	int		width;
+	int		height;
+	double	zoom;
+}			t_vars;
 
 s_complex	complex_mul(s_complex a, s_complex b)
 {
@@ -43,21 +32,24 @@ s_complex	complex_add(s_complex a, s_complex b)
 	return ((s_complex){a.real + b.real, a.imag + b.imag});
 }
 
-void	draw(void *mlx, void *mlx_win)
+void	draw(t_vars *v, double x, double y)
 {
 	int			i;
 	s_complex	z;
 	s_complex	res;
 	int			is_inside;
 
-	z = (s_complex){-2, -2};
-	while (z.real < 2)
+	z = (s_complex){(-2 + (x - v->width) / v->width) / v->zoom, (-2 + (y
+				- v->height) / v->zoom) / v->height};
+	printf("[x: %f, x / v->width: %f, y: %f, y / v->height: %f]", x, x
+		/ v->width, y, y / v->height);
+	while (z.real < 2 / v->zoom)
 	{
-		z.real += 0.01;
+		z.real += 0.01 / v->zoom;
 		z.imag = -1;
-		while (z.imag < 2)
+		while (z.imag < 2 / v->zoom)
 		{
-			z.imag += 0.01;
+			z.imag += 0.01 / v->zoom;
 			i = 0;
 			res = (s_complex){0, 0};
 			is_inside = 1;
@@ -73,20 +65,44 @@ void	draw(void *mlx, void *mlx_win)
 				i++;
 			}
 			if (is_inside)
-				mlx_pixel_put(mlx, mlx_win, z.real * 100 + 250, z.imag * 100
-					+ 250, 0xFFFFFF);
+				mlx_pixel_put(v->mlx, v->win, z.real * v->zoom * 100 + v->width
+					/ 2, z.imag * v->zoom * 100 + v->height / 2, 0xFFFFFF);
 		}
 	}
 }
 
+int	event_handler(int button, int x, int y, void *param)
+{
+	t_vars	*v;
+
+	v = (t_vars *)param;
+	if (button == 4)
+	{
+		mlx_clear_window(v->mlx, v->win);
+		if (v->zoom > 1)
+			v->zoom /= 1.2;
+		draw(v, (double)x, (double)y);
+	}
+	else if (button == 5)
+	{
+		mlx_clear_window(v->mlx, v->win);
+		if (v->zoom < 10)
+			v->zoom *= 1.2;
+		draw(v, (double)x, (double)y);
+	}
+	return (0);
+}
 int	main(void)
 {
-	void	*mlx;
-	void	*mlx_win;
+	t_vars	*v;
 
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 500, 500, "fractol");
-	mlx_hook(mlx_win, FocusIn, FocusChangeMask, event_handler, mlx);
-	draw(mlx, mlx_win);
-	mlx_loop(mlx);
+	v = malloc(sizeof(t_vars));
+	v->width = 400;
+	v->height = 400;
+	v->zoom = 1;
+	v->mlx = mlx_init();
+	v->win = mlx_new_window(v->mlx, v->width, v->height, "fractol");
+	mlx_mouse_hook(v->win, event_handler, v);
+	draw(v, (double)(v->width / 2), (double)(v->height / 2));
+	mlx_loop(v->mlx);
 }
