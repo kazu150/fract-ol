@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/07/22 20:39:15 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/07/24 18:51:06 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ void	draw(t_vars *v, double x, double y)
 				i++;
 			}
 			if (is_inside)
-				mlx_pixel_put(v->mlx, v->win, z.real * v->zoom * 100 + v->width
-					/ 2, z.imag * v->zoom * 100 + v->height / 2, 0xFFFFFF);
+				mlx_pixel_put(v->mlx, v->win, z.real * v->zoom * 100 + (x - 200)
+					* v->zoom + v->width / 2, z.imag * v->zoom * 100 + (y - 200)
+					* v->zoom + v->height / 2, 0xFFFFFF);
 		}
 	}
 }
