@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/07/28 19:01:59 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/07/31 19:21:04 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,23 @@ int	color(int i)
 {
 	if (i < 3)
 		return (0xffc1e0);
-	if (i < 5)
-		return (0xffc1ff);
 	if (i < 7)
-		return (0xe0c1ff);
+		return (0xffc1ff);
 	if (i < 10)
-		return (0xc1c1ff);
-	if (i < 13)
-		return (0xc1e0ff);
-	if (i < 16)
-		return (0xc1ffff);
+		return (0xe0c1ff);
 	if (i < 20)
-		return (0xc1ffe0);
-	if (i < 27)
-		return (0xc1ffc1);
-	if (i < 40)
-		return (0xe0ffc1);
+		return (0xc1c1ff);
+	if (i < 30)
+		return (0xc1e0ff);
 	if (i < 50)
+		return (0xc1ffff);
+	if (i < 100)
+		return (0xc1ffe0);
+	if (i < 150)
+		return (0xc1ffc1);
+	if (i < 200)
+		return (0xe0ffc1);
+	if (i < 250)
 		return (0xffffc1);
 	return (0xffe0c1);
 }
@@ -91,7 +91,7 @@ void	draw(t_vars *v)
 			i = 0;
 			c = (s_complex){0, 0};
 			is_inside = 1;
-			while (i < 100)
+			while (i < CALC_MAX)
 			{
 				c = complex_add(complex_mul(c, c), z);
 				if (sqrt(c.real * c.real + c.imag * c.imag) > 2)
@@ -121,8 +121,8 @@ void	update_coordinate_offset(int x, int y, t_vars *v, int is_zoom_out)
 	{
 		if (v->zoom > 1)
 		{
-			v->x_offset = v->x_offset / 1.2;
-			v->y_offset = v->y_offset / 1.2;
+			v->x_offset = v->x_offset / ZOOM_LEVEL + (x - WIDTH / 2);
+			v->y_offset = v->y_offset / ZOOM_LEVEL + (y - HEIGHT / 2);
 		}
 		else
 		{
@@ -132,8 +132,8 @@ void	update_coordinate_offset(int x, int y, t_vars *v, int is_zoom_out)
 	}
 	else
 	{
-		v->x_offset = v->x_offset + (x - WIDTH / 2) * v->zoom / 2;
-		v->y_offset = v->y_offset + (y - HEIGHT / 2) * v->zoom / 2;
+		v->x_offset = v->x_offset * ZOOM_LEVEL + (x - WIDTH / 2);
+		v->y_offset = v->y_offset * ZOOM_LEVEL + (y - HEIGHT / 2);
 	}
 }
 
@@ -145,17 +145,43 @@ int	event_handler(int button, int x, int y, void *param)
 	if (button == 4)
 	{
 		if (v->zoom > 1)
-			v->zoom /= 1.2;
+			v->zoom /= ZOOM_LEVEL;
 		update_coordinate_offset(x, y, v, 1);
 		draw(v);
 	}
 	else if (button == 5)
 	{
-		if (v->zoom < 100)
-			v->zoom *= 1.2;
+		v->zoom *= ZOOM_LEVEL;
 		update_coordinate_offset(x, y, v, 0);
 		draw(v);
 	}
+	return (0);
+}
+
+static void	clean_exit(t_vars *v)
+{
+	if (v->img.img_ptr)
+		mlx_destroy_image(v->mlx, v->img.img_ptr);
+	if (v->win)
+		mlx_destroy_window(v->mlx, v->win);
+	if (v->mlx)
+	{
+		mlx_destroy_display(v->mlx);
+		free(v->mlx);
+	}
+	exit(0);
+}
+
+static int	handle_key(int keycode, t_vars *v)
+{
+	if (keycode == KEY_ESC)
+		clean_exit(v);
+	return (0);
+}
+
+static int	handle_close(t_vars *v)
+{
+	clean_exit(v);
 	return (0);
 }
 
@@ -170,6 +196,8 @@ int	main(void)
 	v->x_offset = 0;
 	v->y_offset = 0;
 	mlx_mouse_hook(v->win, event_handler, v);
+	mlx_hook(v->win, EVENT_KEY_PRESS, MASK_KEY_PRESS, handle_key, v);
+	mlx_hook(v->win, EVENT_DESTROY, 0, handle_close, v);
 	draw(v);
 	mlx_loop(v->mlx);
 }

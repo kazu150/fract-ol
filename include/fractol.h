@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:58:10 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/07/26 15:45:37 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/07/31 19:18:04 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,21 @@
 
 # define WIDTH 600
 # define HEIGHT 600
-
+# define ZOOM_LEVEL 1.2
+# define CALC_MAX 300
+# define KEY_ESC 65307
+# define EVENT_KEY_PRESS 2
+# define MASK_KEY_PRESS (1L << 0)
+# define EVENT_DESTROY 17
 typedef struct s_img
 {
-	void *img_ptr; // mlx_new_image() の戻り値を格納
-	char *data;    // 画像バッファ
-	int bpp;       // bits per pixel
-	int size_line; // 1行のバイト数
-	int endian;    // エンディアン
+	void	*img_ptr;
+	char	*data;
+	int		bpp;
+	int		size_line;
+	int		endian;
 }			t_img;
+
 typedef struct s_vars
 {
 	void	*mlx;
