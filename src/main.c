@@ -6,21 +6,21 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/07/31 19:21:04 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/01 17:16:12 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-s_complex	complex_mul(s_complex a, s_complex b)
+t_complex	complex_mul(t_complex a, t_complex b)
 {
-	return ((s_complex){a.real * b.real - a.imag * b.imag, a.real * b.imag
+	return ((t_complex){a.real * b.real - a.imag * b.imag, a.real * b.imag
 		+ a.imag * b.real});
 }
 
-s_complex	complex_add(s_complex a, s_complex b)
+t_complex	complex_add(t_complex a, t_complex b)
 {
-	return ((s_complex){a.real + b.real, a.imag + b.imag});
+	return ((t_complex){a.real + b.real, a.imag + b.imag});
 }
 
 int	color(int i)
@@ -61,11 +61,11 @@ void	put_to_image(t_img *img, int x, int y, int color)
 void	draw(t_vars *v)
 {
 	int			i;
-	s_complex	z;
-	s_complex	c;
+	t_complex	z;
+	t_complex	c;
 	int			is_inside;
-	s_complex	min;
-	s_complex	max;
+	t_complex	min;
+	t_complex	max;
 	int			x;
 	int			y;
 	double		scale;
@@ -79,22 +79,32 @@ void	draw(t_vars *v)
 	v->img.img_ptr = mlx_new_image(v->mlx, WIDTH, HEIGHT);
 	v->img.data = mlx_get_data_addr(v->img.img_ptr, &v->img.bpp,
 			&v->img.size_line, &v->img.endian);
-	z.real = min.real;
+	c.real = min.real;
 	scale = 4.0 / (WIDTH * v->zoom);
 	while (x < WIDTH)
 	{
 		y = 0;
 		while (y < HEIGHT)
 		{
-			z.real = (x - WIDTH / 2.0 + v->x_offset) * scale;
-			z.imag = (y - HEIGHT / 2.0 + v->y_offset) * scale;
+			if (v->set.set_type == MANDELBROT_SET)
+			{
+				c.real = (x - WIDTH / 2.0 + v->x_offset) * scale;
+				c.imag = (y - HEIGHT / 2.0 + v->y_offset) * scale;
+				z = (t_complex){0, 0};
+			}
+			else
+			{
+				c.real = 0.27334;
+				c.imag = 0.00742;
+				z = (t_complex){(x - WIDTH / 2.0 + v->x_offset) * scale, (y
+						- HEIGHT / 2.0 + v->y_offset) * scale};
+			}
 			i = 0;
-			c = (s_complex){0, 0};
 			is_inside = 1;
 			while (i < CALC_MAX)
 			{
-				c = complex_add(complex_mul(c, c), z);
-				if (sqrt(c.real * c.real + c.imag * c.imag) > 2)
+				z = complex_add(complex_mul(z, z), c);
+				if (sqrt(z.real * z.real + z.imag * z.imag) > 2)
 				{
 					is_inside = 0;
 					break ;
@@ -176,6 +186,18 @@ static int	handle_key(int keycode, t_vars *v)
 {
 	if (keycode == KEY_ESC)
 		clean_exit(v);
+	else
+	{
+		if (keycode == KEY_UP_ARROW)
+			v->y_offset = v->y_offset - 30;
+		if (keycode == KEY_DOWN_ARROW)
+			v->y_offset = v->y_offset + 30;
+		if (keycode == KEY_LEFT_ARROW)
+			v->x_offset = v->x_offset - 30;
+		if (keycode == KEY_RIGHT_ARROW)
+			v->x_offset = v->x_offset + 30;
+		draw(v);
+	}
 	return (0);
 }
 
@@ -185,16 +207,66 @@ static int	handle_close(t_vars *v)
 	return (0);
 }
 
-int	main(void)
+int	is_num(char *target)
+{
+	char	dot_already_exists;
+	int		i;
+
+	dot_already_exists = 0;
+	i = 0;
+	if (target[0] == '-' || target[0] == '+')
+		i++;
+	while (target[i])
+	{
+		if (!ft_isdigit(target[i]) && target[i] != '.')
+			return (0);
+		if (target[i] == '.')
+		{
+			if (dot_already_exists)
+				return (0);
+			if (i == 0 || target[i + 1] == 0)
+				return (0);
+			dot_already_exists = 1;
+		}
+		i++;
+	}
+	return (1);
+}
+static int	invalid_param(int argc, char **argv)
+{
+	if (argc < 2)
+		return (0);
+	if (ft_strncmp(argv[1], "m", 2) == 0 && argc == 2)
+		return (0);
+	if (ft_strncmp(argv[1], "j", 2) == 0 && argc == 4 && is_num(argv[2])
+		&& is_num(argv[3]))
+		return (0);
+	return (1);
+}
+
+int	main(int argc, char **argv)
 {
 	t_vars	*v;
 
+	if (invalid_param(argc, argv))
+	{
+		ft_printf("valid param list\nm: mandelbrot\nj real_num imaginary_num: julia\n");
+		exit(0);
+	}
 	v = malloc(sizeof(t_vars));
 	v->zoom = 1;
 	v->mlx = mlx_init();
 	v->win = mlx_new_window(v->mlx, WIDTH, HEIGHT, "fractol");
 	v->x_offset = 0;
 	v->y_offset = 0;
+	if (ft_strncmp(argv[1], "m", 2) == 0)
+		v->set.set_type = MANDELBROT_SET;
+	if (ft_strncmp(argv[1], "j", 2) == 0)
+	{
+		v->set.set_type = JULIA_SET;
+		v->set.complex.real = ft_atoi(argv[2]);
+		v->set.complex.imag = ft_atoi(argv[3]);
+	}
 	mlx_mouse_hook(v->win, event_handler, v);
 	mlx_hook(v->win, EVENT_KEY_PRESS, MASK_KEY_PRESS, handle_key, v);
 	mlx_hook(v->win, EVENT_DESTROY, 0, handle_close, v);
