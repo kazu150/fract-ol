@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/01 17:16:12 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/01 18:32:18 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,35 @@ t_complex	complex_add(t_complex a, t_complex b)
 	return ((t_complex){a.real + b.real, a.imag + b.imag});
 }
 
-int	color(int i)
+int	color(int pattern, int i)
 {
-	if (i < 3)
+	const int	*color_ranges[3];
+	const int	color_range_l[] = {COLOR_RANGE_L_VALUES};
+	const int	color_range_m[] = {COLOR_RANGE_M_VALUES};
+	const int	color_range_s[] = {COLOR_RANGE_S_VALUES};
+
+	color_ranges[0] = color_range_l;
+	color_ranges[1] = color_range_m;
+	color_ranges[2] = color_range_s;
+	if (i < color_ranges[pattern][0])
 		return (0xffc1e0);
-	if (i < 7)
+	if (i < color_ranges[pattern][1])
 		return (0xffc1ff);
-	if (i < 10)
+	if (i < color_ranges[pattern][2])
 		return (0xe0c1ff);
-	if (i < 20)
+	if (i < color_ranges[pattern][3])
 		return (0xc1c1ff);
-	if (i < 30)
+	if (i < color_ranges[pattern][4])
 		return (0xc1e0ff);
-	if (i < 50)
+	if (i < color_ranges[pattern][5])
 		return (0xc1ffff);
-	if (i < 100)
+	if (i < color_ranges[pattern][6])
 		return (0xc1ffe0);
-	if (i < 150)
+	if (i < color_ranges[pattern][7])
 		return (0xc1ffc1);
-	if (i < 200)
+	if (i < color_ranges[pattern][8])
 		return (0xe0ffc1);
-	if (i < 250)
+	if (i < color_ranges[pattern][9])
 		return (0xffffc1);
 	return (0xffe0c1);
 }
@@ -94,8 +102,8 @@ void	draw(t_vars *v)
 			}
 			else
 			{
-				c.real = 0.27334;
-				c.imag = 0.00742;
+				c.real = v->set.complex.real;
+				c.imag = v->set.complex.imag;
 				z = (t_complex){(x - WIDTH / 2.0 + v->x_offset) * scale, (y
 						- HEIGHT / 2.0 + v->y_offset) * scale};
 			}
@@ -113,7 +121,7 @@ void	draw(t_vars *v)
 			}
 			if (!is_inside)
 			{
-				put_to_image(&v->img, x, y, color(i));
+				put_to_image(&v->img, x, y, color(v->color_range_pattern, i));
 			}
 			y++;
 		}
@@ -196,6 +204,12 @@ static int	handle_key(int keycode, t_vars *v)
 			v->x_offset = v->x_offset - 30;
 		if (keycode == KEY_RIGHT_ARROW)
 			v->x_offset = v->x_offset + 30;
+		if (keycode == KEY_1)
+			v->color_range_pattern = COLOR_RANGE_L;
+		if (keycode == KEY_2)
+			v->color_range_pattern = COLOR_RANGE_M;
+		if (keycode == KEY_3)
+			v->color_range_pattern = COLOR_RANGE_S;
 		draw(v);
 	}
 	return (0);
@@ -235,7 +249,7 @@ int	is_num(char *target)
 static int	invalid_param(int argc, char **argv)
 {
 	if (argc < 2)
-		return (0);
+		return (1);
 	if (ft_strncmp(argv[1], "m", 2) == 0 && argc == 2)
 		return (0);
 	if (ft_strncmp(argv[1], "j", 2) == 0 && argc == 4 && is_num(argv[2])
@@ -259,6 +273,7 @@ int	main(int argc, char **argv)
 	v->win = mlx_new_window(v->mlx, WIDTH, HEIGHT, "fractol");
 	v->x_offset = 0;
 	v->y_offset = 0;
+	v->color_range_pattern = COLOR_RANGE_L;
 	if (ft_strncmp(argv[1], "m", 2) == 0)
 		v->set.set_type = MANDELBROT_SET;
 	if (ft_strncmp(argv[1], "j", 2) == 0)
