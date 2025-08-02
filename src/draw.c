@@ -6,25 +6,20 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 12:25:11 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/02 13:23:06 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:37:43 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-static void	put_image(t_img *img, int x, int y, int color)
+static void	put_image(t_img *img, t_coordinate co, int color)
 {
 	char	*dst;
 
-	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
+	if (co.x < 0 || co.y < 0 || co.x >= WIDTH || co.y >= HEIGHT)
 		return ;
-	dst = img->data + (y * img->size_line + x * (img->bpp / 8));
+	dst = img->data + (co.y * img->size_line + co.x * (img->bpp / 8));
 	*(unsigned int *)dst = color;
-}
-
-static double	os_calc(int position, int size, double offset, double scale)
-{
-	return ((position - size / 2.0 + offset) * scale);
 }
 
 static void	initialize_vars(t_vars *v)
@@ -35,7 +30,7 @@ static void	initialize_vars(t_vars *v)
 	v->scale = 4.0 / (WIDTH * v->zoom);
 }
 
-static void	calc(t_vars *v, int x, int y, t_complex z, t_complex c)
+static void	calc(t_vars *v, t_coordinate co, t_complex z, t_complex c)
 {
 	int	i;
 
@@ -45,43 +40,49 @@ static void	calc(t_vars *v, int x, int y, t_complex z, t_complex c)
 		z = complex_add(complex_mul(z, z), c);
 		if (sqrt(z.real * z.real + z.imag * z.imag) > 2)
 		{
-			put_image(&v->img, x, y, color(v->color_range_pattern, i));
+			put_image(&v->img, co, color(v->color_range_pattern, i));
 			return ;
 		}
 		i++;
 	}
 	return ;
 }
-void	draw(t_vars *v)
+
+void	draw_main(t_vars *v, t_coordinate co)
 {
 	t_complex	z;
 	t_complex	c;
-	int			x;
-	int			y;
+
+	if (v->set.set_type == MANDELBROT_SET)
+	{
+		c.real = os_calc(co.x, WIDTH, v->x_offset, v->scale);
+		c.imag = os_calc(co.y, HEIGHT, v->y_offset, v->scale);
+		z = (t_complex){0, 0};
+	}
+	else
+	{
+		c = (t_complex){v->set.complex.real, v->set.complex.imag};
+		z.real = os_calc(co.x, WIDTH, v->x_offset, v->scale);
+		z.imag = os_calc(co.y, HEIGHT, v->y_offset, v->scale);
+	}
+	calc(v, co, z, c);
+}
+
+void	draw(t_vars *v)
+{
+	t_coordinate	co;
 
 	initialize_vars(v);
-	x = 0;
-	while (x < WIDTH)
+	co.x = 0;
+	while (co.x < WIDTH)
 	{
-		y = 0;
-		while (y < HEIGHT)
+		co.y = 0;
+		while (co.y < HEIGHT)
 		{
-			if (v->set.set_type == MANDELBROT_SET)
-			{
-				c.real = os_calc(x, WIDTH, v->x_offset, v->scale);
-				c.imag = os_calc(y, HEIGHT, v->y_offset, v->scale);
-				z = (t_complex){0, 0};
-			}
-			else
-			{
-				c = (t_complex){v->set.complex.real, v->set.complex.imag};
-				z.real = os_calc(x, WIDTH, v->x_offset, v->scale);
-				z.imag = os_calc(y, HEIGHT, v->y_offset, v->scale);
-			}
-			calc(v, x, y, z, c);
-			y++;
+			draw_main(v, co);
+			co.y++;
 		}
-		x++;
+		co.x++;
 	}
 	mlx_put_image_to_window(v->mlx, v->win, v->img.img_ptr, 0, 0);
 }
