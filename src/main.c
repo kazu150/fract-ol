@@ -6,11 +6,20 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/02 16:33:18 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/02 17:10:10 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
+
+void	initialize_vars(t_vars *v)
+{
+	v->zoom = 1;
+	v->mlx = mlx_init();
+	v->win = mlx_new_window(v->mlx, WIDTH, HEIGHT, "fractol");
+	v->x_offset = 0;
+	v->y_offset = 0;
+}
 
 int	main(int argc, char **argv)
 {
@@ -18,11 +27,9 @@ int	main(int argc, char **argv)
 
 	validate_params(argc, argv);
 	v = malloc(sizeof(t_vars));
-	v->zoom = 1;
-	v->mlx = mlx_init();
-	v->win = mlx_new_window(v->mlx, WIDTH, HEIGHT, "fractol");
-	v->x_offset = 0;
-	v->y_offset = 0;
+	if (!v)
+		return (0);
+	initialize_vars(v);
 	v->color_range_pattern = COLOR_RANGE_L;
 	if (ft_strncmp(argv[1], "m", 2) == 0)
 		v->set.set_type = MANDELBROT_SET;
