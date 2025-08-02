@@ -6,7 +6,7 @@
 #    By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/03 16:26:12 by kaisogai          #+#    #+#              #
-#    Updated: 2025/08/01 18:45:29 by kaisogai         ###   ########.fr        #
+#    Updated: 2025/08/02 12:26:02 by kaisogai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 SRCS = \
-	$(SRC_DIR)/main.c $(SRC_DIR)/colors.c $(SRC_DIR)/complex.c $(SRC_DIR)/validation.c
+	$(SRC_DIR)/main.c $(SRC_DIR)/colors.c $(SRC_DIR)/complex.c \
+	$(SRC_DIR)/validation.c $(SRC_DIR)/handlers.c  $(SRC_DIR)/draw.c
 
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 MLX_DIR   = mlx

@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:58:10 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/01 18:49:15 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/02 13:07:32 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define KEY_1 49
 # define KEY_2 50
 # define KEY_3 51
+# define KEY_MOVE_RANGE 30
 # define EVENT_KEY_PRESS 2
 # define MASK_KEY_PRESS (1L << 0)
 # define EVENT_DESTROY 17
@@ -41,9 +42,9 @@
 # define COLOR_RANGE_L 0
 # define COLOR_RANGE_M 1
 # define COLOR_RANGE_S 2
-# define COLOR_RANGE_S_VALUES 15, 25, 35, 60, 110, 160, 210, 260, 280
-# define COLOR_RANGE_M_VALUES 10, 15, 25, 35, 60, 100, 140, 180, 210
 # define COLOR_RANGE_L_VALUES 2, 4, 6, 8, 10, 20, 30, 40, 50
+# define COLOR_RANGE_M_VALUES 10, 15, 25, 35, 60, 100, 140, 180, 210
+# define COLOR_RANGE_S_VALUES 15, 25, 35, 60, 110, 160, 210, 260, 280
 
 typedef struct s_img
 {
@@ -76,11 +77,16 @@ typedef struct s_vars
 	double		x_offset;
 	double		y_offset;
 	t_img		img;
+	double		scale;
 }				t_vars;
 
 t_complex		complex_mul(t_complex a, t_complex b);
 t_complex		complex_add(t_complex a, t_complex b);
-int				invalid_param(int argc, char **argv);
+void			validate_params(int argc, char **argv);
 int				color(int pattern, int i);
+int				handle_key(int keycode, t_vars *v);
+int				handle_close(t_vars *v);
+int				event_handler(int button, int x, int y, void *param);
+void			draw(t_vars *v);
 
 #endif
