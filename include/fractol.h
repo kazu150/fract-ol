@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:58:10 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/02 13:07:32 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/02 16:29:12 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,12 @@ typedef struct s_vars
 	double		scale;
 }				t_vars;
 
+typedef struct s_coordinate
+{
+	int			x;
+	int			y;
+}				t_coordinate;
+
 t_complex		complex_mul(t_complex a, t_complex b);
 t_complex		complex_add(t_complex a, t_complex b);
 void			validate_params(int argc, char **argv);
@@ -88,5 +94,7 @@ int				handle_key(int keycode, t_vars *v);
 int				handle_close(t_vars *v);
 int				event_handler(int button, int x, int y, void *param);
 void			draw(t_vars *v);
+double			os_calc(int position, int size, double offset, double scale);
+double			atod(char *str);
 
 #endif

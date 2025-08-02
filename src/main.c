@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/02 12:29:41 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/02 16:33:18 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ int	main(int argc, char **argv)
 	if (ft_strncmp(argv[1], "j", 2) == 0)
 	{
 		v->set.set_type = JULIA_SET;
-		v->set.complex.real = ft_atoi(argv[2]);
-		v->set.complex.imag = ft_atoi(argv[3]);
+		v->set.complex.real = atod(argv[2]);
+		v->set.complex.imag = atod(argv[3]);
+		printf("%f,%f", atod(argv[2]), atod(argv[3]));
+		fflush(stdout);
 	}
 	mlx_mouse_hook(v->win, event_handler, v);
 	mlx_hook(v->win, EVENT_KEY_PRESS, MASK_KEY_PRESS, handle_key, v);
