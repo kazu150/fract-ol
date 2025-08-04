@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 13:37:54 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/02 17:07:46 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 12:58:01 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,14 @@
 double	os_calc(int position, int size, double offset, double scale)
 {
 	return ((position - size / 2.0 + offset) * scale);
+}
+
+static int	sign(char s)
+{
+	if (s == '-')
+		return (-1);
+	else
+		return (1);
 }
 
 double	atod(char *str)
@@ -42,5 +50,5 @@ double	atod(char *str)
 		}
 		i++;
 	}
-	return (ft_atoi(str) + decimal_part);
+	return (ft_atoi(str) + (decimal_part * sign(str[0])));
 }
