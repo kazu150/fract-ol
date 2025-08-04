@@ -6,7 +6,7 @@
 #    By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/03 16:26:12 by kaisogai          #+#    #+#              #
-#    Updated: 2025/08/02 15:23:26 by kaisogai         ###   ########.fr        #
+#    Updated: 2025/08/04 17:43:19 by kaisogai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,9 +71,6 @@ fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@$(MAKE) -C $(MLX_DIR) clean
 
-debug: CFLAGS += -g
-debug: re
-
 re: fclean all
 
-.PHONY: all clean fclean re libft debug
+.PHONY: all clean fclean re libft
