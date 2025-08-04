@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 12:25:11 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/04 16:59:04 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:04:52 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	put_image(t_img *img, t_coordinate co, int color)
 static void	initialize_vars(t_vars *v)
 {
 	if (v->img.img_ptr)
-		mlx_destroy_image(v->mlx, v->img.img_ptr); // 前のイメージを解放
+		mlx_destroy_image(v->mlx, v->img.img_ptr);
 	v->img.img_ptr = mlx_new_image(v->mlx, WIDTH, HEIGHT);
 	v->img.data = mlx_get_data_addr(v->img.img_ptr, &v->img.bpp,
 			&v->img.size_line, &v->img.endian);

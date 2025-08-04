@@ -6,13 +6,13 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/04 17:01:10 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:03:28 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-void	initialize_vars(t_vars *v)
+void	initialize_vars(t_vars *v, char **argv)
 {
 	v->zoom = 1;
 	v->mlx = mlx_init();
@@ -21,6 +21,14 @@ void	initialize_vars(t_vars *v)
 	v->y_offset = 0;
 	v->color_range_pattern = COLOR_RANGE_L;
 	v->img.img_ptr = NULL;
+	if (ft_strncmp(argv[1], "m", 2) == 0)
+		v->set.set_type = MANDELBROT_SET;
+	if (ft_strncmp(argv[1], "j", 2) == 0)
+	{
+		v->set.set_type = JULIA_SET;
+		v->set.complex.real = atod(argv[2]);
+		v->set.complex.imag = atod(argv[3]);
+	}
 }
 
 int	main(int argc, char **argv)
@@ -31,15 +39,7 @@ int	main(int argc, char **argv)
 	v = malloc(sizeof(t_vars));
 	if (!v)
 		return (0);
-	initialize_vars(v);
-	if (ft_strncmp(argv[1], "m", 2) == 0)
-		v->set.set_type = MANDELBROT_SET;
-	if (ft_strncmp(argv[1], "j", 2) == 0)
-	{
-		v->set.set_type = JULIA_SET;
-		v->set.complex.real = atod(argv[2]);
-		v->set.complex.imag = atod(argv[3]);
-	}
+	initialize_vars(v, argv);
 	mlx_mouse_hook(v->win, event_handler, v);
 	mlx_hook(v->win, EVENT_KEY_PRESS, MASK_KEY_PRESS, handle_key, v);
 	mlx_hook(v->win, EVENT_DESTROY, 0, handle_close, v);
