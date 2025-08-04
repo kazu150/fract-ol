@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:58:10 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/02 16:29:12 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:38:36 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,13 @@
 # define KEY_3 51
 # define KEY_MOVE_RANGE 30
 # define EVENT_KEY_PRESS 2
-# define MASK_KEY_PRESS (1L << 0)
+# define MASK_KEY_PRESS 1
 # define EVENT_DESTROY 17
 # define MANDELBROT_SET 1
 # define JULIA_SET 2
 # define COLOR_RANGE_L 0
 # define COLOR_RANGE_M 1
 # define COLOR_RANGE_S 2
-# define COLOR_RANGE_L_VALUES 2, 4, 6, 8, 10, 20, 30, 40, 50
-# define COLOR_RANGE_M_VALUES 10, 15, 25, 35, 60, 100, 140, 180, 210
-# define COLOR_RANGE_S_VALUES 15, 25, 35, 60, 110, 160, 210, 260, 280
 
 typedef struct s_img
 {

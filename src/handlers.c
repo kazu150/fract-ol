@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 18:53:17 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/01 18:58:03 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 16:50:53 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static void	clean_exit(t_vars *v)
 		mlx_destroy_display(v->mlx);
 		free(v->mlx);
 	}
+	free(v);
 	exit(0);
 }
 

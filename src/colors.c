@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 18:39:04 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/01 18:49:01 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 14:28:44 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	color(int pattern, int i)
 {
-	const int	color_range_l[] = {COLOR_RANGE_L_VALUES};
-	const int	color_range_m[] = {COLOR_RANGE_M_VALUES};
-	const int	color_range_s[] = {COLOR_RANGE_S_VALUES};
+	const int	color_range_l[] = {2, 4, 6, 8, 10, 20, 30, 40, 50};
+	const int	color_range_m[] = {10, 15, 25, 35, 60, 100, 140, 180, 210};
+	const int	color_range_s[] = {15, 25, 35, 60, 110, 160, 210, 260, 280};
 	const int	*color_ranges[] = {color_range_l, color_range_m, color_range_s};
 
 	if (i < color_ranges[pattern][0])
