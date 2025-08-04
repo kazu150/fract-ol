@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:57:24 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/04 17:03:28 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:46:28 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ void	initialize_vars(t_vars *v, char **argv)
 {
 	v->zoom = 1;
 	v->mlx = mlx_init();
+	if (!v->mlx)
+		exit(1);
 	v->win = mlx_new_window(v->mlx, WIDTH, HEIGHT, "fractol");
+	if (!v->win)
+		clean_exit(v);
 	v->x_offset = 0;
 	v->y_offset = 0;
 	v->color_range_pattern = COLOR_RANGE_L;

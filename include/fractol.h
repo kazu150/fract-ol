@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:58:10 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/04 17:44:04 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:48:38 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,6 @@ int				event_handler(int button, int x, int y, void *param);
 void			draw(t_vars *v);
 double			os_calc(int position, int size, double offset, double scale);
 double			atod(char *str);
+void			clean_exit(t_vars *v);
 
 #endif

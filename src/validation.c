@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 18:40:12 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/02 12:30:45 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:47:13 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static int	is_num(char *target)
 
 static void	show_params_and_exit(void)
 {
-	ft_printf("valid param list\n");
-	ft_printf("m: mandelbrot set\n");
-	ft_printf("j real_num imaginary_num: julia set\n");
+	ft_printf("Usage\n");
+	ft_printf("./fractol m: mandelbrot set\n");
+	ft_printf("./fractol j <r_num> <i_num>: julia set\n");
 	exit(0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 18:53:17 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/04 17:43:24 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:45:01 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	update_coordinate_offset(int x, int y, t_vars *v, int is_zoom_out)
 	}
 }
 
-static void	clean_exit(t_vars *v)
+void	clean_exit(t_vars *v)
 {
 	if (v->img.img_ptr)
 		mlx_destroy_image(v->mlx, v->img.img_ptr);
