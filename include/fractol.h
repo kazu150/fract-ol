@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 17:58:10 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/04 16:38:36 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:44:04 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <math.h>
-# include <stdio.h>
 
 # define WIDTH 600
 # define HEIGHT 600
