@@ -6,7 +6,7 @@
 /*   By: kaisogai <kaisogai@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 18:53:17 by kaisogai          #+#    #+#             */
-/*   Updated: 2025/08/04 19:45:01 by kaisogai         ###   ########.fr       */
+/*   Updated: 2025/08/07 18:09:06 by kaisogai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,8 @@ static void	update_coordinate_offset(int x, int y, t_vars *v, int is_zoom_out)
 {
 	if (is_zoom_out)
 	{
-		if (v->zoom > 1)
-		{
-			v->x_offset = v->x_offset / ZOOM_LEVEL + (x - WIDTH / 2);
-			v->y_offset = v->y_offset / ZOOM_LEVEL + (y - HEIGHT / 2);
-		}
-		else
-		{
-			v->x_offset = 0;
-			v->y_offset = 0;
-		}
+		v->x_offset = v->x_offset / ZOOM_LEVEL + (x - WIDTH / 2);
+		v->y_offset = v->y_offset / ZOOM_LEVEL + (y - HEIGHT / 2);
 	}
 	else
 	{
@@ -87,8 +79,7 @@ int	event_handler(int button, int x, int y, void *param)
 	v = (t_vars *)param;
 	if (button == 4)
 	{
-		if (v->zoom > 1)
-			v->zoom /= ZOOM_LEVEL;
+		v->zoom /= ZOOM_LEVEL;
 		update_coordinate_offset(x, y, v, 1);
 		draw(v);
 	}
